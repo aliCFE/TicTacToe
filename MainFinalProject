@@ -1,0 +1,123 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+
+// game board
+char board[3][3] = {
+    {'-','-','-'},
+    {'-','-','-'},
+    {'-','-','-'}
+};
+
+void displyBoard(){
+    // X-axis
+    cout << "  0 1 2\n";
+    // display board
+    for(int i = 0; i < 3; i++){
+        //Y-axis
+        cout << i << " ";
+        for(int j = 0; j < 3; j++){
+            cout << board[i][j] << " ";
+        }
+        cout << endl;
+    }
+    cout << endl;
+}
+
+bool checkWin(char player){
+    //Rows
+    for(int i = 0; i < 3; i++){
+        if( board[i][0] == player && 
+            board[i][1] == player &&
+            board[i][2] == player){
+            return true;
+        }
+    }
+
+    //Columns
+    for(int i = 0; i < 3; i++){
+        if(board[0][i] == player && 
+           board[1][i] == player && 
+           board[2][i] == player){
+            return true;
+        }
+    }
+
+    //Diagonals
+    if(board[0][0] == player && 
+    board[1][1] == player && 
+    board[2][2] == player){
+        return true;
+    }
+    if(board[2][0] == player && 
+    board[1][1] == player && 
+    board[0][2] == player){
+        return true;
+    }
+
+    // No Win
+    return false;
+}
+
+bool checkTie(){
+    // if there are no other moves and no one wins its a tie
+    int count = 0;
+    for(int i = 0; i < 3; i++){
+        for(int j = 0; j < 3; j++){
+            if(board[i][j] == '-'){
+                return false;
+            }
+            else{
+                count++;
+            }
+        }
+    }
+    if(count == 9){
+        return true;
+    }
+    return false;
+}
+
+void playGame(){
+    // set default player = X
+    char player = 'X';
+    while(true){
+        displyBoard();
+        cout << "Player " << player << " Enter your position to play.\n";
+        int a, b;
+        cin >> a >> b;
+        //defense condition
+        if(a < 3 and b < 3 and a >= 0 and b >= 0 and board[a][b] == '-'){
+            //making the player move
+            board[a][b] = player;
+            // if win
+            if(checkWin(player)){
+                cout << player << " win :D\n";
+                break;
+            }
+            //A player play a move if the other one plays
+            (player == 'X')?player = 'O':player = 'X';
+        }
+        // defense for coordinates input 
+        else{
+            cout << "That is Invalid input!\n";
+            continue;
+        }
+
+        // if someone win
+        if(checkWin(player)){
+            cout << player << " win :D\n";
+            break;
+        }
+        // if tie
+        if(checkTie()){
+            cout << "TIE\n";
+            break;
+        }
+    }
+}
+
+int main(){
+    playGame();
+}
